@@ -96,30 +96,33 @@ int main(){
 
 void addSpaceship(Ship spaceship[], int jumlahSpaceshipBaru, int &countShip, int MAX_SHIP){
     if(countShip == 0){
-        cin.ignore();
-        for(int i = 0; i < jumlahSpaceshipBaru; i++){
+        for(int i = 0; i < jumlahSpaceshipBaru && i < MAX_SHIP; i++){
             cout << "Masukkan nama spaceship yang ke-" << i + 1 << ": ";
+            cin.ignore(1000, '\n');
             getline(cin, spaceship[i].nama);
+            
             cout << "Masukkan jumlah kru: ";
-            cin >> spaceship[i].kru;
-            while(spaceship[i].kru < 1){
+            while(!(cin >> spaceship[i].kru) || spaceship[i].kru < 1){
                 cout << "Masukkan jumlah yang sesuai!\n";
                 cout << "Masukkan jumlah kru: ";
-                cin >> spaceship[i].kru;
+                cin.clear();
+                cin.ignore(1000, '\n');
             }
+            
             cout << "Masukkan presentase bahan bakar spaceship: ";
-            cin >> spaceship[i].bahanBakar;
-            while(spaceship[i].bahanBakar < 0 || spaceship[i].bahanBakar > 100){
-                cout << "Masukkan jumlah yang sesuai!\n";
+            while(!(cin >> spaceship[i].bahanBakar) || spaceship[i].bahanBakar < 0 || spaceship[i].bahanBakar > 100){
+                cout << "Masukkan jumlah yang sesuai (0-100)!\n";
                 cout << "Masukkan bahan bakar awal: ";
-                cin >> spaceship[i].bahanBakar;
+                cin.clear();
+                cin.ignore(1000, '\n');
             }
+            
             cout << "Masukkan presentase kondisi spaceship: ";
-            cin >> spaceship[i].kondisi;
-            while(spaceship[i].kondisi < 0 || spaceship[i].kondisi > 100){
-                cout << "Masukkan jumlah yang sesuai!\n";
+            while(!(cin >> spaceship[i].kondisi) || spaceship[i].kondisi < 0 || spaceship[i].kondisi > 100){
+                cout << "Masukkan jumlah yang sesuai (0-100)!\n";
                 cout << "Masukkan kondisi awal spaceship: ";
-                cin >> spaceship[i].kondisi;
+                cin.clear();
+                cin.ignore(1000, '\n');
             }
             countShip++;
         }
@@ -127,36 +130,40 @@ void addSpaceship(Ship spaceship[], int jumlahSpaceshipBaru, int &countShip, int
     else{
         int tambah = 0;
         cout << "Masukkan jumlah kapal yang ingin ditambah: ";
-        cin >> tambah;
-        while(countShip + tambah > MAX_SHIP){
-            cout << "Jumlah melebihi batas maksimal!";
+        while(!(cin >> tambah) || tambah < 0 || countShip + tambah > MAX_SHIP){
+            cout << "Jumlah tidak valid atau melebihi batas maksimal!\n";
             cout << "Masukkan jumlah kapal yang ingin ditambah: ";
-            cin >> tambah;
+            cin.clear();
+            cin.ignore(1000, '\n');
         }
-        cin.ignore();
+        
         for(int i = 0; i < tambah; i++){
             cout << "Masukkan nama spaceship yang ke-" << countShip + 1 << ": ";
-            getline(cin, spaceship[countShip + i].nama);
+            cin.ignore(1000, '\n');
+            getline(cin, spaceship[countShip].nama);
+            
             cout << "Masukkan jumlah kru: ";
-            cin >> spaceship[countShip + i].kru;
-            while(spaceship[countShip + i].kru < 1){
+            while(!(cin >> spaceship[countShip].kru) || spaceship[countShip].kru < 1){
                 cout << "Masukkan jumlah yang sesuai!\n";
                 cout << "Masukkan jumlah kru: ";
-                cin >> spaceship[countShip + i].kru;
+                cin.clear();
+                cin.ignore(1000, '\n');
             }
+            
             cout << "Masukkan presentase bahan bakar spaceship: ";
-            cin >> spaceship[countShip + i].bahanBakar;
-            while(spaceship[countShip + i].bahanBakar < 0 || spaceship[countShip + i].bahanBakar > 100){
-                cout << "Masukkan jumlah yang sesuai!\n";
+            while(!(cin >> spaceship[countShip].bahanBakar) || spaceship[countShip].bahanBakar < 0 || spaceship[countShip].bahanBakar > 100){
+                cout << "Masukkan jumlah yang sesuai (0-100)!\n";
                 cout << "Masukkan bahan bakar awal: ";
-                cin >> spaceship[countShip + i].bahanBakar;
+                cin.clear();
+                cin.ignore(1000, '\n');
             }
+            
             cout << "Masukkan presentase kondisi spaceship: ";
-            cin >> spaceship[countShip + i].kondisi;
-            while(spaceship[countShip + i].kondisi < 0 || spaceship[countShip + i].kondisi > 100){
-                cout << "Masukkan jumlah yang sesuai!\n";
+            while(!(cin >> spaceship[countShip].kondisi) || spaceship[countShip].kondisi < 0 || spaceship[countShip].kondisi > 100){
+                cout << "Masukkan jumlah yang sesuai (0-100)!\n";
                 cout << "Masukkan kondisi awal spaceship: ";
-                cin >> spaceship[countShip + i].kondisi;
+                cin.clear();
+                cin.ignore(1000, '\n');
             }
             countShip++;
         }
