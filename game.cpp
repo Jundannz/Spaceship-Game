@@ -12,8 +12,8 @@ struct Ship{
 
 void addSpaceship(Ship spaceship[], int jumlahSpaceshipBaru, int &countShip, int MAX_SHIP);
 void displaySpaceship(Ship spaceship[], int countShip);
-void isiBahanBakar(Ship spaceship[], int jumlahSpaceship);
-void repairShip(Ship spaceship[], int jumlahSpaceship);
+void isiBahanBakar(Ship spaceship[], int &countShip);
+void repairShip(Ship spaceship[], int &countShip);
 void misi(Ship spaceship[], int countShip, string namaPlanet[], int jarakPlanet[], int &planetKe, int &jarakTotal, string planetDikunjungi[], int &totalBahanBakar);
 void randomEvent(Ship spaceship[], int countShip);
 bool hancur(Ship spaceship[], int countShip, int &indexHancur, int &jumlahHancur);
@@ -43,12 +43,12 @@ int main(){
         cout << "Masukkan jumlah spaceship (Maks = " << MAX_SHIP <<"): ";
         cin >> jumlahSpaceship;
     }
-    addSpaceship(spaceship, jumlahSpaceship, countShip, MAX_SHIP);
+    addSpaceship(spaceship, countShip, countShip, MAX_SHIP);
     displaySpaceship(spaceship, countShip);
-    for(int i = 0; i < jumlahSpaceship; i++){
+    for(int i = 0; i < countShip; i++){
         if(spaceship[i].bahanBakar <=30){
             cout << "Peringatan bahan bakar rendah, pada spaceship nomor | ";
-            for(int i = 0; i < jumlahSpaceship; i++){
+            for(int i = 0; i < countShip; i++){
                 if(spaceship[i].bahanBakar <= 30){
                     cout << i + 1 << " | ";
                 }
@@ -65,20 +65,21 @@ int main(){
             addSpaceship(spaceship, jumlahSpaceship, countShip, MAX_SHIP);
             displaySpaceship(spaceship, countShip);
         }else if(menu == 2){
-            isiBahanBakar(spaceship, jumlahSpaceship);
+            isiBahanBakar(spaceship, countShip);
             displaySpaceship(spaceship, countShip);
         }else if(menu == 3){
-            repairShip(spaceship, jumlahSpaceship);
+            repairShip(spaceship, countShip);
             displaySpaceship(spaceship, countShip);
         }else if(menu == 4){
             cout << "Spaceship sedang menjalankan misi...\n";
             misi(spaceship, countShip, namaPlanet, jarakPlanet, planetKe, jarakTotal, planetDikunjungi, totalBahanBakar);
-            bool isHancur = hancur(spaceship, countShip, indexHancur, jumlahHancur);
-            if(isHancur == true){
-                for(int i = indexHancur; i < countShip - jumlahHancur; i++){
+            while(true) {
+                bool isHancur = hancur(spaceship, countShip, indexHancur, jumlahHancur);
+                if(!isHancur) break;
+                for(int i = indexHancur; i < countShip - 1; i++){
                     spaceship[i] = spaceship[i+1];
                 }
-                countShip -= jumlahHancur;
+                countShip--;
             }
             displaySpaceship(spaceship, countShip);
         }else if(menu == 5){
@@ -178,10 +179,15 @@ void displaySpaceship(Ship spaceship[], int countShip){
     }
 }
 
-void isiBahanBakar(Ship spaceship[], int countShip){
+void isiBahanBakar(Ship spaceship[], int &countShip){
     int pilihSpaceship;
     cout << "Mau isi bahan bakar spaceship nomor berapa: ";
     cin >> pilihSpaceship;
+    while(pilihSpaceship < 1 || pilihSpaceship > countShip){
+        cout << "Masukkan nomor kapal yang benar!\n";
+        cout << "Mau isi isi bahan spaceship nomor berapa: ";
+        cin >> pilihSpaceship;
+    }
     int isianBB = 0;
     cout << "Masukkan jumlah pengisian bahan bakar: ";
     cin >> isianBB;
@@ -194,10 +200,15 @@ void isiBahanBakar(Ship spaceship[], int countShip){
     displaySpaceship(spaceship, countShip);
 }
 
-void repairShip(Ship spaceship[], int countShip){
+void repairShip(Ship spaceship[], int &countShip){
     int pilihSpaceship;
     cout << "Mau isi perbaiki spaceship nomor berapa: ";
     cin >> pilihSpaceship;
+    while(pilihSpaceship < 1 || pilihSpaceship > countShip){
+        cout << "Masukkan nomor kapal yang benar!\n";
+        cout << "Mau isi perbaiki spaceship nomor berapa: ";
+        cin >> pilihSpaceship;
+    }
     int perbaikan = 0;
     cout << "Masukkan presentase perbaikan: ";
     cin >> perbaikan;
@@ -211,6 +222,10 @@ void repairShip(Ship spaceship[], int countShip){
 }
 
 void misi(Ship spaceship[], int countShip, string namaPlanet[], int jarakPlanet[], int &planetKe, int &jarakTotal, string planetDikunjungi[], int &totalBahanBakar){
+    if(planetKe > 5){
+        cout << "Semua planet telah dikunjungi";
+        return;
+    }
     jarakTotal += jarakPlanet[planetKe];
     planetDikunjungi[planetKe] = namaPlanet[planetKe];
     for(int i = 0; i < countShip; i++){
@@ -262,18 +277,13 @@ void randomEvent(Ship spaceship[], int countShip){
 bool hancur(Ship spaceship[], int countShip, int &indexHancur, int &jumlahHancur){
     jumlahHancur = 0;
     bool adaHancur = false;
-    for(int i = 0; i < countShip;){
+    for(int i = 0; i < countShip; i++){
         if(spaceship[i].bahanBakar < 0 || spaceship[i].kondisi < 0 || spaceship[i].kru <= 0){
             indexHancur = i;
             cout << "Spaceship " << spaceship[i].nama << " telah hancur\n";
-            for (int j = i; j < countShip - 1; j++) {
-                spaceship[j] = spaceship[j + 1];
-            }
-            countShip--;
             jumlahHancur++;
             adaHancur = true;
-        } else {
-            i++;
+            break;
         }
     }
     return adaHancur;
