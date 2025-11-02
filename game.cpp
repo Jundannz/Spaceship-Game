@@ -57,7 +57,12 @@ int main(){
         cout << "6. Keluar\n";
         cout << "------------------------------------------------------------\n";
         cout << "Masukkan pilihan: ";
-        cin >> menu;
+        while(!(cin >> menu)){
+            cout << "Input tidak valid! Masukkan angka.\n";
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << "Masukkan pilihan: ";
+        }
         if(menu == 1){
             addSpaceship(spaceship, jumlahSpaceship, countShip, MAX_SHIP);
             displaySpaceship(spaceship, countShip);
@@ -201,7 +206,7 @@ void displaySpaceship(Ship spaceship[], int countShip){
         cout << "------------------------------------------------------------\n";
     }
 }
-
+ 
 void isiBahanBakar(Ship spaceship[], int &countShip){
     int pilihSpaceship;
     cout << "Mau isi bahan bakar spaceship nomor berapa: ";
@@ -214,8 +219,12 @@ void isiBahanBakar(Ship spaceship[], int &countShip){
     int isianBB = 0;
     cout << "Masukkan jumlah pengisian bahan bakar: ";
     cin >> isianBB;
-    while(spaceship[pilihSpaceship-1].bahanBakar + isianBB > 100){
-        cout << "Tidak dapat melebihi 100%\n";
+    while(isianBB < 0 || spaceship[pilihSpaceship-1].bahanBakar + isianBB > 100){
+        if(isianBB < 0){
+            cout << "Nilai tidak boleh negatif!\n";
+        } else {
+            cout << "Tidak dapat melebihi 100%\n";
+        }
         cout << "Masukkan jumlah pengisian bahan bakar: ";
         cin >> isianBB;
     }
@@ -234,8 +243,12 @@ void repairShip(Ship spaceship[], int &countShip){
     int perbaikan = 0;
     cout << "Masukkan presentase perbaikan: ";
     cin >> perbaikan;
-    while(spaceship[pilihSpaceship-1].kondisi + perbaikan > 100){
-        cout << "Tidak dapat melebihi 100%\n";
+    while(perbaikan < 0 || spaceship[pilihSpaceship-1].kondisi + perbaikan > 100){
+        if(perbaikan < 0){
+            cout << "Nilai tidak boleh negatif!\n";
+        } else {
+            cout << "Tidak dapat melebihi 100%\n";
+        }
         cout << "Masukkan presentase perbaikan: ";
         cin >> perbaikan;
     }
@@ -243,8 +256,12 @@ void repairShip(Ship spaceship[], int &countShip){
 }
 
 void misi(Ship spaceship[], int countShip, string namaPlanet[], int jarakPlanet[], int &planetKe, int &jarakTotal, string planetDikunjungi[], int &totalBahanBakar){
-    if(planetKe > 5){
+    if(planetKe >= 5){
         cout << "Semua planet telah dikunjungi";
+        return;
+    }
+    if(planetKe < 0){
+        cout << "Error: Invalid planet index";
         return;
     }
     jarakTotal += jarakPlanet[planetKe];
